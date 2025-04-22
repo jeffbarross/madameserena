@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Madame Serena | by Luma Barros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-color: #d4af37;
+      --text-color: #5a2e2e;
+      --bg-light: #fff8f0;
+      --font-title: 'Playfair Display', serif;
+      --font-body: 'Roboto', sans-serif;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: var(--font-body);
+      color: var(--text-color);
+      background: var(--bg-light);
+      scroll-behavior: smooth;
+    }
+    header {
+      background: #fff;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    header h1 {
+      font-family: var(--font-title);
+      font-size: 26px;
+      color: var(--text-color);
+    }
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: var(--main-color);
+    }
+    .hero {
+      background: url('fundo_salao_transparente.png') center/cover no-repeat;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+    }
+    .hero h2 {
+      font-family: var(--font-title);
+      font-size: 38px;
+      color: #fff;
+      background-color: rgba(90, 46, 46, 0.7);
+      padding: 20px;
+      border-radius: 8px;
+    }
+    section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    section h3 {
+      font-family: var(--font-title);
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    section p {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .btn {
+      transition: all 0.3s ease;
+      transform: scale(1);
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: var(--main-color);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      background-color: #b8922d;
+    }
+    footer {
+      background: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    
+    <a href="#" style="text-decoration: none;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src='logo.png' alt='Madame Serena Logo' style='height: 60px;'>
+        <span style='font-family: Playfair Display, serif; font-size: 20px; font-weight: 600; color: #5a2e2e;'>Madame Serena</span>
+      </div>
+    </a>
+    
+    <nav>
+      <a href="#sobre">Sobre</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#contato">Contato</a>
+<a href="#" class="btn disabled">📱 Agendar pelo App (em breve)</a>
+    </nav>
+  </header>
+  <div class="hero" style="background: url('fundo_salao_50porcento.png') center/cover no-repeat;" >
+    <h2>Beleza com cuidado e elegância</h2>
+  </div>
+  <section id="sobre">
+    <h3>Sobre</h3>
+    <p>
+      O Madame Serena nasceu do sonho da profissional Luma Barros, terapeuta capilar e especialista em recuperar a autoestima através da beleza e saúde dos fios. Localizado na Av. Nova Cantareira, 2087 – 11º andar – sala 112, o salão oferece experiências únicas em mechas, tratamentos e acolhimento.
+    </p>
+  </section>
+  <section id="servicos">
+    <h3>Serviços</h3>
+    <p>
+      - Mechas personalizadas<br>
+      - Terapia capilar<br>
+      - Hidratação profunda<br>
+      - Reconstrução dos fios<br>
+      - Escova e finalização
+    </p>
+    <a href="https://wa.me/5511958656153?text=Ol%C3%A1%2C+quero+agendar+um+hor%C3%A1rio+no+Madame+Serena!" class="btn" target="_blank">Agendar pelo WhatsApp</a>
+  </section>
+  
+    <main style="padding: 60px 20px; max-width: 960px; margin: auto; background: rgba(255, 255, 255, 0.85); border-radius: 16px;">
+      <h1>Sobre</h1>
+      <p>O Madame Serena nasceu do sonho da profissional Luma Barros, terapeuta capilar e especialista em recuperar a autoestima através da beleza e saúde dos fios.</p>
+    </main>
+    <section id="contato">
+    <h3>Contato</h3>
+    <p>
+      📍 Av. Nova Cantareira, 2087 – 11º andar – sala 112<br>
+      📱 WhatsApp: (11) 95865-6153<br>
+      📸 Instagram: <a href="https://www.instagram.com/madameserenaofc" target="_blank">@madameserenaofc</a>
+    </p>
+  </section>
+  <footer>
+    &copy; 2025 Madame Serena. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
