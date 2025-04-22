@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agendamentos - Madame Serena</title>
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css' rel='stylesheet' />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #fff8f0; }
+    h1 { text-align: center; color: #5a2e2e; }
+    #calendar { max-width: 900px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <h1>Calendário de Agendamentos</h1>
+  <div id='calendar'></div>
+
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'pt-br',
+        selectable: true,
+        dateClick: function(info) {
+          if (confirm('Deseja ativar/desativar esta data?')) {
+            fetch('/api/bloquear', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ data: info.dateStr })
+            }).then(() => calendar.refetchEvents());
+          }
+        },
+        events: function(fetchInfo, successCallback, failureCallback) {
+          Promise.all([
+            fetch('/api/agendamentos').then(res => res.json()),
+            fetch('/api/bloqueios').then(res => res.json())
+          ]).then(([agendamentos, bloqueios]) => {
+            const eventos = [
+              ...agendamentos.map(a => ({
+                title: a.nome,
+                start: a.data,
+                color: '#3179f6'
+              })),
+              ...bloqueios.map(b => ({
+                title: 'Bloqueado',
+                start: b,
+                color: '#e74c3c'
+              }))
+            ];
+            successCallback(eventos);
+          });
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
+</html>
