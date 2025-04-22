@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Madame Serena - Calendário</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #fdf6f0; }
+    .container { max-width: 900px; margin: 0 auto; padding: 30px; }
+    h1 { text-align: center; color: #6e2e2e; }
+    #calendar { margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .login-form { max-width: 400px; margin: 60px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    input, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="login-form" id="login-box">
+    <h2>Login da Proprietária</h2>
+    <input type="text" id="usuario" placeholder="Usuário" />
+    <input type="password" id="senha" placeholder="Senha" />
+    <button onclick="logar()">Entrar</button>
+  </div>
+
+  <div class="container hidden" id="calendario-box">
+    <h1>Agenda Madame Serena</h1>
+    <div id="calendar"></div>
+  </div>
+
+  <script>
+    let bloqueios = [];
+
+    function logar() {
+      const usuario = document.getElementById('usuario').value;
+      const senha = document.getElementById('senha').value;
+      if (usuario === 'admin' && senha === '1234') {
+        document.getElementById('login-box').classList.add('hidden');
+        document.getElementById('calendario-box').classList.remove('hidden');
+        iniciarCalendario();
+      } else {
+        alert("Usuário ou senha incorretos.");
+      }
+    }
+
+    function iniciarCalendario() {
+      fetch('/api/bloqueios').then(res => res.json()).then(data => {
+        bloqueios = data;
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale: 'pt-br',
+          selectable: true,
+          dateClick: function(info) {
+            const dia = info.dateStr;
+            fetch('/api/bloquear', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ data: dia })
+            }).then(() => calendar.refetchEvents());
+          },
+          events: function(fetchInfo, successCallback, failureCallback) {
+            fetch('/api/bloqueios')
+              .then(res => res.json())
+              .then(bloq => {
+                const eventos = bloq.map(d => ({
+                  title: 'Bloqueado',
+                  start: d,
+                  color: '#e74c3c'
+                }));
+                successCallback(eventos);
+              });
+          }
+        });
+        calendar.render();
+      });
+    }
+  </script>
+</body>
+</html>
