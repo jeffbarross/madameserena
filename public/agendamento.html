@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agendamento - Madame Serena</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fffaf6; color: #4e2c23; }
+    header { background: #fce7db; padding: 20px; text-align: center; }
+    nav { background: #f5c9b4; padding: 10px 0; text-align: center; }
+    nav a { text-decoration: none; color: #4e2c23; font-weight: bold; margin: 0 15px; }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #a34f2f;
+      color: white;
+      font-weight: bold;
+      border: none;
+    }
+    #calendar { margin-top: 30px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header><h1>Agende seu Horário</h1></header>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="agendamento.html">Agendamento</a>
+  </nav>
+
+  <div class="container">
+    <form id="form-agendamento">
+      <input type="text" id="nome-cliente" placeholder="Seu nome" required />
+      <input type="tel" id="whatsapp-cliente" placeholder="Seu WhatsApp" required />
+      <select id="data-hora-disponivel"></select>
+      <button type="submit">Agendar</button>
+    </form>
+    <div id="confirmado" class="hidden"><p><strong>Agendamento confirmado com sucesso!</strong></p></div>
+  </div>
+
+  <div class="container hidden" id="admin-box">
+    <h2>Calendário da Proprietária</h2>
+    <div id="calendar"></div>
+    <h3>Agendamentos Confirmados</h3>
+    <ul id="lista-agendamentos"></ul>
+  </div>
+
+  <script>
+    const agendamentos = [];
+    const bloqueios = [];
+    const horarios = ['09:00', '11:00', '13:00', '15:00', '17:00'];
+
+    function gerarHorarios() {
+      const hoje = new Date();
+      const select = document.getElementById('data-hora-disponivel');
+      for (let i = 0; i < 14; i++) {
+        const data = new Date(hoje);
+        data.setDate(data.getDate() + i);
+        const dia = data.toISOString().split('T')[0];
+        horarios.forEach(hora => {
+          const option = document.createElement('option');
+          option.value = `${dia}|${hora}`;
+          option.textContent = `${dia} às ${hora}`;
+          select.appendChild(option);
+        });
+      }
+    }
+
+    document.getElementById('form-agendamento').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('nome-cliente').value;
+      const whats = document.getElementById('whatsapp-cliente').value;
+      const [dia, hora] = document.getElementById('data-hora-disponivel').value.split('|');
+      agendamentos.push({ nome, dia, hora });
+      document.getElementById('confirmado').classList.remove('hidden');
+      const msg = `Olá ${nome}, seu agendamento foi confirmado para ${dia} às ${hora}. Nos vemos no Madame Serena 💇‍♀️`;
+      window.open(`https://wa.me/${whats.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`);
+    });
+
+    function mostrarLogin() {
+      const senha = prompt("Senha da proprietária:");
+      if (senha === "1234") {
+        document.getElementById('admin-box').classList.remove('hidden');
+        renderizarCalendario();
+        atualizarLista();
+      }
+    }
+
+    function renderizarCalendario() {
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'pt-br',
+        dateClick: function(info) {
+          const dia = info.dateStr;
+          if (bloqueios.includes(dia)) {
+            bloqueios.splice(bloqueios.indexOf(dia), 1);
+          } else {
+            bloqueios.push(dia);
+          }
+          calendar.refetchEvents();
+        },
+        events: function(fetchInfo, successCallback) {
+          const eventos = bloqueios.map(data => ({
+            title: 'Bloqueado',
+            start: data,
+            color: '#e74c3c'
+          }));
+          successCallback(eventos);
+        }
+      });
+      calendar.render();
+    }
+
+    function atualizarLista() {
+      const ul = document.getElementById('lista-agendamentos');
+      ul.innerHTML = '';
+      agendamentos.forEach(a => {
+        const li = document.createElement('li');
+        li.textContent = `${a.nome} - ${a.dia} às ${a.hora}`;
+        ul.appendChild(li);
+      });
+    }
+
+    gerarHorarios();
+  </script>
+</body>
+</html>
